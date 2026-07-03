@@ -123,6 +123,32 @@ aparecem como "padrão competitivo" no setor:
 - Automação predial (hardware) está fora do escopo de JS/PostgreSQL;
   exigirá pesquisa específica do equipamento quando chegar a hora.
 
+## Decisão registrada — Controle de pagamentos (Fase 2, Faturamento/Borderô)
+
+Ao emitir a fatura mensal do aluguel, o sistema deve verificar a
+situação da fatura anterior antes de gerar a nova, e não tratar cada
+mês como evento isolado. Pontos definidos:
+
+- **Status da fatura**: cada cobrança tem um estado —
+  `pendente`, `pago`, `atrasado`, `pago parcial`, `cancelado`.
+- **Saldo devedor acumulado**: se a fatura anterior não foi quitada
+  integralmente, a diferença deve ser carregada para a próxima
+  cobrança como linha separada ("Saldo anterior: R$ X"), nunca
+  misturada ao valor do aluguel do mês — mantém rastreabilidade.
+- **Crédito não resgatado**: se o inquilino pagou a mais, ou tem
+  algum valor a receber (ex: reparo que ele bancou e será descontado
+  do aluguel), isso vira um crédito em aberto, abatido em fatura
+  futura.
+- **Juros/multa por atraso**: calculado com base nos dias de atraso,
+  seguindo a regra definida em contrato (ex: multa fixa + juros
+  pro-rata ao mês).
+- **Modelo de dados**: evitar sobrescrever um campo único de status
+  no contrato (perde histórico). Preferir lógica de livro-razão
+  (ledger) — cada fatura é um registro imutável, e saldo/crédito são
+  lançamentos vinculados a ela, nunca sobrescritos. Mesma lógica
+  contábil já prevista para "Contas a pagar/receber" e "Caixa e fluxo
+  de caixa", aplicada também ao inquilino.
+
 ## Próximo passo imediato
 
 Fechar o desenho da tabela de proprietários (pessoa física/jurídica,
