@@ -22,6 +22,9 @@ administradores, controle financeiro robusto, e futuramente automações
   para editar conteúdo de arquivos (`code nome-do-arquivo`).
 - Antes de criar qualquer tabela nova, discutir necessidades reais de
   negócio primeiro — não usar estrutura genérica sem validar.
+  - Toda decisão técnica (banco, código, arquitetura) deve se
+    fundamentar em boas práticas de mercado, mesmo que isso exija
+    mais tempo de discussão antes de codificar.
 
 ## Decisões técnicas já tomadas
 
@@ -124,3 +127,28 @@ aparecem como "padrão competitivo" no setor:
 
 Fechar o desenho da tabela de proprietários (pessoa física/jurídica,
 dados bancários) e seguir para a tabela de imóveis.
+
+## Padrão de qualidade almejado
+
+Este não é um "pequeno projeto" — é um produto de longo prazo, no
+nível de ambição de players estabelecidos do mercado (Kenlo,
+Superlógica, Jetimob). Critério de decisão para cada módulo: "isso é
+só funcional, ou é o que uma ferramenta líder faria?". Objetivo:
+moderno, intuitivo, acessível, amigável, e fundamentado em boas
+práticas — mesmo que isso exija mais tempo de construção. Aceita-se
+jornada longa, por fases, sem pressa de "terminar".
+
+## Cadastro de Proprietários — concluído
+
+Tabela `proprietarios` criada e validada em produção local. Decisões:
+
+- PF/PJ detectados e validados no JavaScript, não no banco (banco só
+  armazena; `tipo_pessoa` e validade de CPF/CNPJ são responsabilidade
+  da camada de aplicação, futura pasta `src/validators/`)
+- Soft delete via coluna `ativo` (BOOLEAN, default true) — nunca
+  excluir registro de verdade, pessoa pode voltar a ter vínculo com
+  o negócio no futuro
+- Dados bancários completos + chave PIX (alinhado ao padrão de
+  mercado de repasse automático via PIX)
+- Endereço completo, com preenchimento futuro via API ViaCEP
+  (usabilidade — pessoa digita só o CEP)

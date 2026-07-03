@@ -1,0 +1,22 @@
+CREATE TABLE proprietarios (
+    id SERIAL PRIMARY KEY,
+    tipo_pessoa VARCHAR(2) NOT NULL,
+    nome TEXT NOT NULL,
+    documento VARCHAR(18) UNIQUE NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE,
+    email TEXT,
+    telefone VARCHAR(20),
+    endereco TEXT,
+    numero VARCHAR(10),
+    complemento TEXT,
+    bairro TEXT,
+    cidade TEXT,
+    estado VARCHAR(2),
+    cep VARCHAR(9),
+    banco TEXT,
+    agencia VARCHAR(10),
+    conta VARCHAR(20),
+    tipo_conta VARCHAR(20),
+    chave_pix TEXT,
+    criado_em TIMESTAMP DEFAULT NOW()
+);
